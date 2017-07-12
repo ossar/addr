@@ -23,10 +23,11 @@ class ProcAddr
             if (!$data = $this->parseLine($line)) {
                 continue;
             }
+            $pref = $data['pref'];
             $prefEn = implode("-", explode(' ', $data['pref_en']));
-            if (!isset($indexes[$data['pref']])) {
-                $indexes[$data['pref']] = $prefEn;
-            } elseif ($indexes[$data['pref']] !== $prefEn) {
+            if (!isset($indexes[$pref][$pref])) {
+                $indexes[$pref][$pref] = $prefEn;
+            } elseif ($indexes[$pref][$pref] !== $prefEn) {
                 throw new Exception('Difference data.');
             }
             $arr = explode(' ', $data['city_en']);
@@ -62,16 +63,16 @@ class ProcAddr
                 throw new Exception('Different numbers');
             }
             foreach ($city as $key => $val) {
-                if (!isset($indexes[$val])) {
-                    $indexes[$val] = $cityEn[$key];
-                } elseif ($indexes[$val] !== $cityEn[$key]) {
+                if (!isset($indexes[$pref][$val])) {
+                    $indexes[$pref][$val] = $cityEn[$key];
+                } elseif ($indexes[$pref][$val] !== $cityEn[$key]) {
                     if (in_array($val, [
-                        '南牧村', '池田町', '朝日町', '明和町', '愛知郡', '三島郡', '川西町',
-                        '海部郡', '松前町', '広川町', '鳩山町', '栄町', '日の出町', '寒川町'
+                        /*'南牧村', '池田町', '朝日町', '明和町', '愛知郡', '三島郡', '川西町',*/
+                        '鳩山町', '栄町', /*'海部郡', '松前町', '広川町', '日の出町', '寒川町'*/
                     ])) {
                         continue;
                     }
-                    var_dump($indexes[$val]);
+                    var_dump($indexes[$pref][$val]);
                     print_r($city);
                     print_r($cityEn);
                     throw new Exception('Different');
@@ -91,9 +92,9 @@ class ProcAddr
                 $addrEn = [implode(' ', $addrEn)];
             }
             foreach ($addr as $key => $val) {
-                if (!isset($indexes[$val])) {
-                    $indexes[$val] = $addrEn[$key];
-                } elseif ($indexes[$val] !== $addrEn[$key]) {
+                if (!isset($indexes[$pref][$val])) {
+                    $indexes[$pref][$val] = $addrEn[$key];
+                } elseif ($indexes[$pref][$val] !== $addrEn[$key]) {
                 }
             }
 
